@@ -1,341 +1,250 @@
-
 <!DOCTYPE html>
-<html lang="pt-br">
-    <head>
-      <script>
-  window.pixelId = "67f972487e2ee6b3e2cd3e05";
-  var a = document.createElement("script");
-  a.setAttribute("async", "");
-  a.setAttribute("defer", "");
-  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-  document.head.appendChild(a);
-</script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="images/favi.webp" type="image/png" />
-    <title>Ajude Ana Laura</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/glide.core.min.css" />
-    <link rel="stylesheet" href="css/glide.theme.min.css" />
-    <link rel="stylesheet" href="css/modal.css" />
-    <script src="js/qrcode.min.js"></script>
-  </head>
-
-</script>
-
-<script>
-   (function () {
-        function redirectBack() {
-          window.location.href = "./upback/index.html";
-        }
- 
-        // Salva a URL inicial
-        const initialPage = location.pathname;
-        
-        // Adiciona um estado ao histórico na primeira carga
-        history.pushState({page: 1}, null, location.href);
-        
-        // Só redireciona quando tentar voltar à página anterior
-        window.addEventListener("popstate", function(event) {
-          // Permite navegação interna (hash links)
-          if (location.pathname === initialPage && location.hash) {
-            return;
-          }
-          // Só redireciona se tentar sair da página inicial
-          if (location.pathname === initialPage && !event.state) {
-            redirectBack();
-          }
-        });
-      })();
-</script>
-
-<script>
-  function getCurrentParams() {
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const result = {};
-    paramsToKeep.forEach(param => {
-      const value = urlSearchParams.get(param);
-      if (value) result[param] = value;
-    });
-    return result;
-  }
-
-  function buildQueryString(params) {
-    return Object.entries(params)
-      .map(([key, val]) => `${encodeURIComponent(key)}=${encodeURIComponent(val)}`)
-      .join("&");
-  }
-
-  function updateInternalLinks() {
-    const links = document.querySelactorAll("a[href]");
-    const currentParams = getCurrentParams();
-    if (Object.keys(currentParams).length === 0) return;
-
-    links.forEach(link => {
-      const href = link.getAttribute("href");
-
-      // Só aplica em links relativos (ou seja, dentro do site)
-      if (href.startsWith("/") || href.startsWith(window.location.origin)) {
-        const url = new URL(href, window.location.origin);
-        const linkParams = new URLSearchParams(url.search);
-
-        // Adiciona os parâmetros desejados
-        for (const key in currentParams) {
-          linkParams.set(key, currentParams[key]);
-        }
-
-        url.search = linkParams.toString();
-        link.setAttribute("href", url.pathname + url.search);
-      }
-    });
-  }
-
-  // Quando a página carregar, atualiza os links
-  document.addEventListener("DOMContentLoaded", updateInternalLinks);
-</script>
-  <body>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajude Ana Laura</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9fb;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 720px;
+      margin: auto;
+      padding: 1rem;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      font-size: 2.2rem;
+      color: #d94b4b;
+    }
+    header p {
+      font-size: 1.1rem;
+    }
+    .cta-button {
+      display: block;
+      width: 100%;
+      background: #d94b4b;
+      color: white;
+      font-size: 1.2rem;
+      padding: 1rem;
+      text-align: center;
+      border: none;
+      border-radius: 8px;
+      margin: 2rem 0;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .cta-button:hover {
+      background: #b33c3c;
+    }
+    .progress-container {
+      margin: 2rem 0;
+    }
+    .progress-bar {
+      background: #ddd;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 30px;
+      position: relative;
+    }
+    .progress-fill {
+      background: linear-gradient(90deg, #f76565, #e13636);
+      height: 100%;
+      width: 60%; /* dinamicamente ajustado */
+      animation: fillBar 2s ease-out;
+    }
+    @keyframes fillBar {
+      0% { width: 0; }
+      100% { width: 60%; }
+    }
+    .progress-text {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      text-align: center;
+    }
+    .donors-count {
+      font-weight: bold;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .donation-amounts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    .donation-amounts button {
+      background: #fff;
+      border: 2px solid #d94b4b;
+      padding: 0.8rem 1.2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .donation-amounts button:hover {
+      background: #d94b4b;
+      color: #fff;
+    }
+    .promo-box {
+      background: #ffe4e4;
+      border-left: 6px solid #d94b4b;
+      padding: 1rem;
+      margin: 2rem 0;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .description {
+      font-size: 1rem;
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+    .exam-img {
+      width: 100%;
+      margin: 1rem 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .pix-popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    .popup-content {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .popup-content img {
+      max-width: 200px;
+      margin-bottom: 1rem;
+    }
+    .popup-content button.copy {
+      background: #d94b4b;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    footer {
+      margin: 3rem 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
     <header>
-      <div class="container">
-        <div class="logo">
-          <a>
-            <img src="images/ajudelogo.png" />
-          </a>
-        </div>
-      </div>
+      <h1>Ajude a Ana Laura!</h1>
+      <p>Com sua doação, Ana poderá realizar o tratamento que tanto precisa. 💖</p>
     </header>
 
-    <div class="post">
-      <h3>
-        💔 Grave doença auto-imune pegou a nossa pequena. Ajude o Ana Laura.
-      </h3>
-      <img src="images/mano1.png" />
-      <div class="image-container">
-        <div class="likes-container">
-          <img src="images/boll.png" alt="Corações" />
-          <!-- Mini Imagem que você carregou -->
-          <span>117 corações recebidos ❤️</span>
-        </div>
+    <button class="cta-button" onclick="scrollToSection('doar')">Doar Agora</button>
+
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 60%"></div>
       </div>
-      <a href="#button-section" class="btn-anchor">
-        <button class="post-button3">DOAR AGORA</button>
-      </a>
-      <p><strong>Mesmo sozinhas estamos batalhando para a vida digna!</strong></p>
+      <div class="progress-text">60% da meta atingida - R$6.000 de R$10.000</div>
+      <div class="donors-count">6520 pessoas já doaram 💗</div>
+    </div>
 
-      <p>
-        A Ana é uma criança muito especial. Ela nasceu paraplégica e precisa de cuidados constantes. Desde o nascimento, sua vida tem sido uma batalha diária… E mesmo assim, ela é pura luz e alegria.. <strong>Infelizmente, o pai a abandonou, e minha filha precisou abrir mão de tudo para cuidar da Ana em tempo integral. Como também sou sozinha, elas vieram morar comigo na roça, em uma área rural de difícil acesso, longe da cidade — e longe da ajuda.</strong>  Nosso dia a dia não é fácil. Eu saio cedo para trabalhar como posso, fazendo faxinas e pequenos serviços na região. Faço das tripas, coração para garantir o básico… Mas o que ganho mal dá pra comida e remédios.
+    <div class="section-title">Escolha um valor para doar</div>
+    <div class="donation-amounts" id="doar">
+      <button onclick="generatePix(20)">R$20</button>
+      <button onclick="generatePix(30)">R$30</button>
+      <button onclick="generatePix(50)">R$50</button>
+      <button onclick="generatePix(100)">R$100</button>
+    </div>
 
-Não temos carro, e o transporte público quase não passa por aqui. Cada ida ao médico é uma luta — e muitas vezes, é simplesmente impossível.</strong>.
-      </p>
+    <div class="promo-box">
+      <strong>✨ DOAÇÃO DUPLICADA! ✨</strong><br>
+      Doações a partir de <strong>R$50</strong> serão <strong>multiplicadas por 2</strong> pelos nossos patrocinadores e empresários! Sua ajuda vale o <strong>dobro até 25/04</strong>. 💥
+    </div>
 
-      <p>
-        <strong>A Ana precisa de uma cadeira de rodas melhor, fraldas, roupas especiais, além de um ambiente mais adaptado às suas necessidades.
-Mas o que mais machuca é ver o quanto ela precisa… e não poder oferecer.
+    <div class="section-title">Por que estamos pedindo ajuda?</div>
+    <div class="description">
+      Ana Laura é uma menina cheia de sonhos que está enfrentando um grave problema de saúde. Sua ajuda é essencial para garantir que ela tenha acesso ao tratamento necessário. 🙏
+    </div>
+    <img class="exam-img" src="https://via.placeholder.com/600x400" alt="Exame 1">
+    <div class="description">Os exames mostram a urgência do tratamento. Qualquer quantia ajuda muito.</div>
+    <img class="exam-img" src="https://via.placeholder.com/600x400" alt="Exame 2">
 
-Por isso, com toda humildade, venho pedir sua ajuda.</strong>.
-      </p>
+    <footer>Obrigado por sua generosidade 💖</footer>
+  </div>
 
-      <p>
-        Qualquer valor pode fazer uma grande diferença na nossa vida e no bem-estar da Ana. E se você não puder doar, apenas compartilhar esta campanha já é um gesto de amor.
+  <!-- Popup -->
+  <div class="pix-popup" id="popup">
+    <div class="popup-content">
+      <div id="qrcode"></div>
+      <p>Chave Pix (copie e cole):</p>
+      <input type="text" id="pixkey" value="" readonly style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
+      <button class="copy" onclick="copyPixKey()">Copiar código Pix</button><br><br>
+      <button onclick="closePopup()">Fechar</button>
+    </div>
+  </div>
 
-      </p>
+  <!-- QR Code Lib -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
-      <p>
-        Hoje estamos vivendo uma situação de desespero. Estou desempregada, com dívidas acumuladas, aluguel atrasado e muitas vezes sem dinheiro nem pra comida. As necessidades básicas da Aninha — como fraldas, itens de higiene, alimentação adequada, medicamentos e transporte para consultas — muitas vezes simplesmente não cabem no que recebemos do governo.</strong>.
-      </p>
+<script>
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  }
 
-      <p>
-        "<strong
-          >Tenho tentado sobreviver com pequenos trabalhos como caricaturista, mas é muito pouco diante de tudo o que precisamos.</strong
-        >"
-      </p>
+  function gerarPix(valor) {
+    const chavePix = 'seuemail@pix.com.br'; // 🟡 SUBSTITUA pela sua chave Pix (email, telefone ou aleatória)
+    const nome = 'Ana Laura da Silva';
+    const cidade = 'SAO PAULO';
+    const identificador = 'AjudeAnaLaura';
 
-      <p>
-        São essas perguntas que me fazem
-        <strong>chorar escondida no banheiro</strong> toda noite.
-      </p>
-
-      <p>
-        Já pensei em desistir…
-        <strong>a tristeza e a ansiedade têm sido companheiras constantes. Mas quando olho pra minha familia e nétinha, lembro o porquê de estar aqui. ela é minha motivação. Meu propósito. Eu nunca vou abandoná-las.</strong>.
-      </p>
-
-      <p>
-        Ser a matriarca não é fácil. Mas é o maior presente que já recebi na vida. A Aninha me ensina sobre amor todos os dias — mesmo sem falar uma palavra.
-      </p>
-
-      <p>
-        Mas a verdade é que... <strong>a gente chegou num ponto crítico.</strong>, Eu estou desempregada. As dívidas só aumentam. Às vezes não temos nem o que comer. E as necessidades básicas da Aninha — fraldas, leite especial, medicação, produtos de higiene — simplesmente não cabem no pouco que a gente recebe do governo..
-      </p>
-
-      <p>
-        Tento conseguir algum dinheiro com faxinas, fazendo roça e lavoura. Mas é muito, muito pouco.
-      </p>
-
-      <p>
-        Mas aí eu olho pro Ana Laura... e lembro porque estou aqui.
-
-ela depende de mim. E eu prometi a mim mesmo que, enquanto eu estiver vivo, ela nunca vai ser abandonada. Nunca.
-      </p>
-
-      <p>
-        Já pensei em desistir várias vezes. Às vezes a tristeza vem com tanta força que eu me pergunto se vou aguentar.
-
-Mas aí eu olho pro Ana Laura... e lembro porque estou aqui.
-
-Ela depende de mim. E eu prometi a mim mesmo que, enquanto eu estiver vivo, ela nunca vai ser abandonada. Nunca.
-      </p>
-      <img src="images/laudo.webp" style="width: 90%; height: auto" />
+    const payload = `00020126360014BR.GOV.BCB.PIX0114${chavePix.length}${chavePix}520400005303986540${valor.toFixed(2).replace('.', '')}5802BR5914${nome.length}${nome}6010${cidade.length}${cidade}62190515${identificador.length}${identificador}6304`;
     
-      <p>
-        É a mesma <strong>tecnologia</strong> usada por
-        <strong>cirurgiões</strong> pra operar à distância, adaptada para
-        devolver a <strong>independência</strong> a crianças como o Ana Laura.
-      </p>
-      <img src="images/mano2.png" style="width: 90%; height: auto" />
-      <p>Se você está lendo isso agora, eu te peço com o coração aberto: nos ajude.
+    document.getElementById('pixCode').value = payload;
 
-Assista nosso vídeo. Veja com seus próprios olhos quem é o Ana Laura, quem somos nós.
+    // Gera QR Code com a payload
+    QRCode.toDataURL(payload, function (err, url) {
+      if (err) console.error(err);
+      document.getElementById('qrCode').src = url;
+    });
 
-E se puder doar qualquer valor, saiba que estará ajudando dois irmãos a continuar lutando juntos — com dignidade, com carinho, com esperança.
+    document.getElementById('pixInfo').style.display = 'block';
+  }
 
-Você pode ser a diferença entre a dor e o alívio. Entre o desespero e a esperança.
-      </p>
-      <a href="#button-section" class="btn-anchor">
-        <button class="post-button3">DOAR AGORA</button>
-      </a>
-      <p><strong>Você receberá:</strong></p>
+  function copiarPix() {
+    const pixInput = document.getElementById('pixCode');
+    navigator.clipboard.writeText(pixInput.value).then(() => {
+      alert('Código Pix copiado com sucesso!');
+    }).catch(err => {
+      console.error('Erro ao copiar Pix: ', err);
+    });
+  }
+</script>
 
-      <p><strong>● Atualizações semanais</strong> da nossa jornada</p>
-      <p><strong>● Vídeo do primeiro abraço</strong> dela com a prótese</p>
-      <p><strong>● Seu nome na nossa lista de anjos</strong> (se desejar)</p>
 
-      <p>
-        <strong>Compartilhe nossa história</strong>. Cada compartilhamento é uma
-        <strong>nova chance</strong> de devolver a infância ao meu filho.
-      </p>
-
-      <p><strong>Que Deus abençoe você e a sua família</strong>.</p>
-
-      <p><strong>Att: Sandra, Mãe do Ana Laura</strong>.</p>
-
-      <div id="button-section">
-        <div class="progress-content">
-          <div class="progress-text">
-            <h4>Arrecadado</h4>
-            <div class="progress-values">
-              <p>R$ 23.450,41</p>
-              <p>R$ 87.000,00</p>
-            </div>
-          </div>
-          <div class="progress-container">
-            <div class="progress-bar" style="width: 27%">
-              <strong>27%</strong>
-            </div>
-          </div>
-        </div>
-
-        <h4 style="text-align: center;">Clique no valor <br> que deseja doar</h4>
-        <p class="donation-multiplier"><strong>✨ DOAÇÃO DUPLICADA! ✨</strong> Doações a partir de R$50 serão multiplicadas por 2 pelos nossos patrocinadores e grupo de empresários que apoiam nossa campanha! Sua ajuda vale o dobro até 25/04. Não perca essa oportunidade de maximizar seu impacto na vida do Ana Laura!</p>
-        <div class="buttons-section">
-          <div class="buttons-section1">
-            <a href="#">
-              <button class="post-button2">R$ 30</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2" style="border: 2px solid #ffcc00; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);">R$ 50</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2">R$ 80</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2">R$ 150</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2">R$ 250</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2">R$ 350</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2">R$ 450</button>
-            </a>
-            <a href="#">
-              <button class="post-button2">R$ 600</button>
-            </a>
-            <a href="#">
-              <button class="post-button2">R$ 900</button>
-            </a>
-          </div>
-          <div class="buttons-section1">
-            <a href="#">
-              <button class="post-button2">R$ 40</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2">R$ 70</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2">R$ 100</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2">R$ 200</button>
-            </a>
-            <a href="#">
-              <button class="post-button2">R$ 300</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2">R$ 400</button>
-            </a>
-
-            <a href="#">
-              <button class="post-button2">R$ 500</button>
-            </a>
-            <a href="#">
-              <button class="post-button2">R$ 700</button>
-            </a>
-            <a href="#">
-              <button class="post-button2">R$ 1000</button>
-            </a>
-          </div>
-        </div>
-          <div class="sc-jXbUNg gNPJrz">
-            <div class="sc-jXbUNg dHwLb">
-              <div class="sc-jXbUNg jbBvcf"></div>
-              <div class="sc-jXbUNg dTrGCo sc-gRtvSG fpURXW"></div>
-            </div>
-          </div>
-
-          <div class="button-pix">
-            <div class="texto" id="1">
-            </div>
-          </div>
-        </div>
-      </div>
-      <footer>
-        <div class="footer-container">
-          <div class="footer-section logo-section">
-            <a>
-              <img src="images/ajudelogo.png" />
-            </a>
-          </div>
-
-          <div class="footer-bottom">
-            <p>2025 - Todos direitos reservados</p>
-          </div>
-        </div>
-      </footer>
-
-      <script data-cfasync="false" src="js/email-decode.min.js"></script>
-      <script src="js/script.js"></script>
-      <script src="js/pix.js"></script>
-  </body>
+</body>
 </html>
